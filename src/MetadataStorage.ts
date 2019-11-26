@@ -30,6 +30,7 @@ export class MetadataStorage {
   readonly collections: Array<CollectionMetadata> = [];
   readonly subCollections: Array<CollectionMetadata> = [];
   readonly repositories: Map<unknown, RepositoryMetadata> = new Map();
+  readonly transientProperties: Map<string, Array<string>> = new Map();
 
   public config: MetadataStorageConfig = {
     validateModels: true,
@@ -87,6 +88,12 @@ export class MetadataStorage {
 
     this.repositories.set(repo.entity, repo);
   };
+
+  public setTransient = (entityName: string, property: string) => {
+    const props = this.transientProperties.get(entityName) || [];
+    props.push(property);
+    this.transientProperties.set(entityName, props);
+  }
 
   public firestoreRef: Firestore = null;
 }
